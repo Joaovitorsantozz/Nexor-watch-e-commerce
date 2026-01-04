@@ -5,6 +5,7 @@ import {
   registerUser,
   loginUser,
   getUserService,
+  editUserService,
 } from "../services/authservice";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
@@ -83,10 +84,26 @@ export async function getUser(req: Request, res: Response) {
     delete user.password;
 
     return res.json(user);
-
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Erro interno" });
   }
 }
 
+export async function editUser(req: Request, res: Response) {
+  try {
+    const userID = (req as any).user.id;
+    const fields = req.body;
+    if (!fields || Object.keys(fields).length == 0) {
+      return res.status(400).json({ msg: "Nenhum campo para atualizar" });
+    }
+    const column = Object.keys(fields);
+    const values = Object.values(fields);
+
+    await editUserService(values, column, userID);
+
+    return res.json({ message: "Campos alterados" });
+  } catch (error) {
+    console.log("error",error);
+  }
+}

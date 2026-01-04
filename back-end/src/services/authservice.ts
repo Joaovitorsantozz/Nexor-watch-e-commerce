@@ -47,3 +47,21 @@ export async function getUserService( email:string){
     return null;
   }
 }
+
+export async function editUserService(
+  values: unknown[],
+  columns: string[],
+  userID: number
+) {
+    const setClause = columns
+    .map(col => `${col} = ?`)
+    .join(", ");
+
+  const query = `
+    UPDATE usern
+    SET ${setClause}
+    WHERE id = ?
+  `;
+
+  return db.query(query, [...values, userID]);
+}
