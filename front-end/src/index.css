@@ -489,7 +489,7 @@ div.item-unique {
   padding-left: 100px;
   height: 100%;
 }
-.user-profile-form{
+.user-profile-form {
   width: 80%;
   height: 60%;
   user-select: 50%;
@@ -558,8 +558,140 @@ div.actions {
     font-weight: 500;
     height: 3em;
   }
-  & .cancel-button:hover{
-    border:1px solid rgb(110, 33, 33);
-    color:rgb(110, 33, 33);
+  & .cancel-button:hover {
+    border: 1px solid rgb(110, 33, 33);
+    color: rgb(110, 33, 33);
+  }
+}
+
+.adress-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100h;
+}
+
+.adress-container {
+  width: 100%;
+  height: 83vh;
+  border-top: 2px solid rgb(219, 219, 219);
+  display: flex;
+}
+
+.adress-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: 40px;
+  padding-left: 100px;
+  height: 100%;
+}
+
+div.adress-wrapper {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  height: 100%;
+}
+
+.new-adress {
+  width: 350px;
+  height: 250px;
+  background-color: white;
+  font-size: 20px;
+
+  border: 2px dashed gray;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: black;
+  & b {
+    color: rgb(80, 80, 80);
+    font-size: 50px;
+    font-weight: 500;
+  }
+}
+.adress-box {
+  width: 350px;
+  height: 250px;
+  border: 2px solid gray;
+  padding: 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  & div.ab-edit {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 20%;
+    margin-top: auto;
+    gap: 3%;
+    align-items: center;
+    & button {
+      background-color: transparent;
+      outline: none;
+      border:none;
+      font-size: 16px;
+      text-decoration: underline;
+      color: #396340;
+      display: flex;
+      align-items: center;
+      & img {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+  & p {
+    font-size: 15px;
+    letter-spacing: 0.6px;
+  }
+  & .ab-username {
+    font-weight: 700;
+  }
+}
+
+.adress-register-section {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+div.adress-register-container {
+  margin-top: 3rem;
+  width: 40%;
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  & form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap:4%;
+    width: 100%;
+    height: 100%;
+    & .adress-input{
+      
+      width:100%;
+    }
+    & input{
+      border:1px solid rgb(180, 180, 180);
+      padding-left: 5px;
+      border-radius: 5px;
+      width: 100%;
+      height: 2.5rem;
+    }
+    & > header > h2 {
+      font-weight: 500;
+      color: #0f0f0f;
+    }
   }
 }

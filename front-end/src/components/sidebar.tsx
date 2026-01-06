@@ -3,6 +3,7 @@ import profile from "../assets/icons/profile.png";
 import shopbag from "../assets/icons/shopbag.png";
 import card from "../assets/icons/card.png";
 import fav from "../assets/icons/fav.png";
+import { Link } from "react-router-dom";
 function SideBar() {
   return (
     <div className="sidebar-div">
@@ -10,11 +11,11 @@ function SideBar() {
       <ul>
         <li>
           <img src={profile} />
-          <a>Dados pessoais</a>
+          <Link to="/user-profile">Dados pessoais</Link>
         </li>
         <li>
           <img src={location} />
-          <a>Endereços</a>
+          <Link to={"/adress-user"}>Endereços</Link>
         </li>
 
         <li>

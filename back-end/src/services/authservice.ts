@@ -19,6 +19,50 @@ export async function registerUser(
   return result;
 }
 
+export async function registerAdress(
+  userId: number,
+  countryId: number,
+  countryName: string,
+  stateId: number,
+  stateName: string,
+  cityId: number,
+  cityName: string,
+  neighborhood: string,
+  street: string,
+  number: string
+) {
+  const sql = `
+    INSERT INTO adressn (
+      userid,
+      country,
+      country_name,
+      state,
+      state_name,
+      city,
+      city_name,
+      neighborhood,
+      street,
+      number
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  const [result] = await db.execute(sql, [
+    userId,
+    countryId,
+    countryName,
+    stateId,
+    stateName,
+    cityId,
+    cityName,
+    neighborhood,
+    street,
+    number,
+  ]);
+
+  return result;
+}
+
 export async function loginUser(email: string) {
   try {
     const [rows] = await db.execute<RowDataPacket[]>(
@@ -33,9 +77,8 @@ export async function loginUser(email: string) {
   }
 }
 
-export async function getUserService( email:string){
-
-    try {
+export async function getUserService(email: string) {
+  try {
     const [rows] = await db.execute<RowDataPacket[]>(
       "SELECT * FROM usern WHERE email = ?",
       [email]
@@ -47,15 +90,37 @@ export async function getUserService( email:string){
     return null;
   }
 }
+export async function getAdressesByUser(userId: number) {
+  const sql = `
+    SELECT
+      id,
+      country,
+      country_name,
+      state,
+      state_name,
+      city,
+      city_name,
+      neighborhood,
+      street,
+      number
+    FROM adressn
+    WHERE userid = ?
+  `;
 
+  const [rows] = await db.execute(sql, [userId]);
+  return rows;
+}
+export async function deleteAdressService(userid:number,adressid:number) {
+  const [result]:any=await db.execute("DELETE FROM adressn WHERE id=? AND userid=?",[adressid,userid]);
+  return result;
+
+}
 export async function editUserService(
   values: unknown[],
   columns: string[],
   userID: number
 ) {
-    const setClause = columns
-    .map(col => `${col} = ?`)
-    .join(", ");
+  const setClause = columns.map((col) => `${col} = ?`).join(", ");
 
   const query = `
     UPDATE usern
