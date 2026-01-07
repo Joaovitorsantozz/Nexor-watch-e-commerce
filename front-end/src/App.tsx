@@ -6,12 +6,16 @@ import UserProfile from "./pages/userProfile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdressPage from "./pages/adressPage";
 import AdressRegisterPage from "./pages/adressPageRegister";
+import RegisterProducts from "./pages/registerProducts";
+//preciso dar um jeito de proteger a rota de registrar produtos,
+//talvez por um token diferente? adicionar o campo isAdmin na table user também
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Home></Home>}></Route>
       <Route path="/login" element={<Login></Login>}></Route>
       <Route path="/register" element={<Register></Register>}></Route>
+      <Route path="/register-products" element={<RegisterProducts></RegisterProducts>}></Route>
       <Route
         path="/user-profile"
         element={

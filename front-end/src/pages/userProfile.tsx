@@ -44,13 +44,19 @@ function UserProfile() {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }).then((response)=>{
-      if(response.data.message=="Campos alterados"){
-        alert("Campos alterados com sucesso");
-      }
-      setUser(prev=>({...prev,...updateFields}));
-      setIsEditing(false);
-    });
+    })
+      .then((response) => {
+        if (response.data.message == "Campos alterados") {
+          alert("Campos alterados com sucesso");
+        }
+        setUser((prev) => ({ ...prev, ...updateFields }));
+        setIsEditing(false);
+      })
+      .catch((error) => {
+        if (error.response.data.message == "cpf invalido") {
+          alert("Cpf inválido");
+        }
+      });
   };
   const validateEdit = yup.object({
     email: yup
@@ -161,7 +167,7 @@ function UserProfile() {
                   {isEditing ? (
                     <Field name="cpf" type="text" placeholder="CPF" />
                   ) : (
-                    <span className="value inter">{user.cpf}</span>
+                    <span className="value inter">{user.cpf}</span> //verificar
                   )}
                 </div>
 
@@ -189,10 +195,15 @@ function UserProfile() {
 
                 <div className="info-row">
                   <span className="label didot">Data de nascimento</span>
+
                   {isEditing ? (
                     <Field name="birthday" type="date" />
                   ) : (
-                    <span className="value inter">{user.birthday || "—"}</span>
+                    <span className="value inter">
+                      {user.birthday
+                        ? new Date(user.birthday).toLocaleDateString("pt-BR")
+                        : "—"}
+                    </span>
                   )}
                 </div>
 

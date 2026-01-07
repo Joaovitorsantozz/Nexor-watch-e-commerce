@@ -64,12 +64,30 @@ function AdressRegisterPage() {
       });
   };
   const validateEdit = yup.object({
-    countryId: yup.string().transform((v) => (v === "" ? null : v)).required(),
-    stateId: yup.string().transform((v) => (v === "" ? null : v)).required(),
-    cityId: yup.string().transform((v) => (v === "" ? null : v)).required(),
-    neighborhood: yup.string().transform((v) => (v === "" ? null : v)).required(),
-    street: yup.string().transform((v) => (v === "" ? null : v)).required(),
-    number: yup.string().transform((v) => (v === "" ? null : v)).required(),
+    countryId: yup
+      .string()
+      .transform((v) => (v === "" ? null : v))
+      .required(),
+    stateId: yup
+      .string()
+      .transform((v) => (v === "" ? null : v))
+      .required(),
+    cityId: yup
+      .string()
+      .transform((v) => (v === "" ? null : v))
+      .required(),
+    neighborhood: yup
+      .string()
+      .transform((v) => (v === "" ? null : v))
+      .required(),
+    street: yup
+      .string()
+      .transform((v) => (v === "" ? null : v))
+      .required(),
+    number: yup
+      .string()
+      .transform((v) => (v === "" ? null : v))
+      .required(),
   });
   return (
     <section className="adress-register-section">
@@ -115,7 +133,11 @@ function AdressRegisterPage() {
                   }
                 }}
               />
-
+              <ErrorMessage
+                component="span"
+                name="country"
+                className="error-message"
+              ></ErrorMessage>
               <StateSelect
                 containerClassName="adress-input"
                 countryid={country ? country.id : 0}
@@ -134,7 +156,11 @@ function AdressRegisterPage() {
                   }
                 }}
               />
-
+              <ErrorMessage
+                component="span"
+                name="state"
+                className="error-message"
+              ></ErrorMessage>
               <CitySelect
                 containerClassName="adress-input"
                 countryid={country ? country.id : 0}
@@ -151,16 +177,34 @@ function AdressRegisterPage() {
                   }
                 }}
               />
-
+              <ErrorMessage
+                component="span"
+                name="city"
+                className="error-message"
+              ></ErrorMessage>
               <Field
                 name="neighborhood"
                 placeholder="Bairro"
                 type="text"
               ></Field>
+              <ErrorMessage
+                component="span"
+                name="neighborhood"
+                className="error-message"
+              ></ErrorMessage>
               <Field name="street" placeholder="Rua" type="text"></Field>
+              <ErrorMessage
+                component="span"
+                name="street"
+                className="error-message"
+              ></ErrorMessage>
               <Field name="number" placeholder="Número" type="text"></Field>
-
-              <button type="submit">Salvar</button>
+              <ErrorMessage
+                component="span"
+                name="number"
+                className="error-message"
+              ></ErrorMessage>
+              <button type="submit" className="adress-register-save-button inter">Salvar</button>
             </Form>
           )}
         </Formik>

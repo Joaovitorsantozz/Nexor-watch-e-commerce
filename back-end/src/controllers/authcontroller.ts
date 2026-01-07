@@ -9,11 +9,46 @@ import {
   registerAdress,
   getAdressesByUser,
   deleteAdressService,
+  setDefaultAdressService,
+  registerProductService,
+  getProductsService,
 } from "../services/authservice";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { emit } from "process";
+import { isValidCPF } from "../isValidCpf";
+export async function registerProduct(req: Request, res: Response) {
+  try {
+    const { name, description, price, stock, active } = req.body;
+    const image = req.file;
 
+    if (
+      !name ||
+      !description ||
+      price == undefined ||
+      stock == undefined ||
+      !image
+    ) {
+      return res.status(400).json({ message: "campos faltando" });
+    }
+    const imageUrl = image ? `/uploads/${image.filename}` : null;
+    const isActive = active === "true";
+    const result = await registerProductService(
+      name,
+      description,
+      Number(price),
+      Number(stock),
+      imageUrl,
+      isActive
+    );
+    if (!result) {
+      res.status(400).json({ message: "Erro ao cadastrar", sucessfull: false });
+    }
+    res.status(201).json({ message: "Produto cadastrado" });
+  } catch (error) {
+    console.log("Erro para cadastrar produtos be", error);
+  }
+}
 export async function register(req: Request, res: Response) {
   try {
     const { name, email, country, password } = req.body;
@@ -150,6 +185,11 @@ export async function editUser(req: Request, res: Response) {
     if (!fields || Object.keys(fields).length == 0) {
       return res.status(400).json({ msg: "Nenhum campo para atualizar" });
     }
+    if(fields.cpf){
+      if(!isValidCPF(fields.cpf)){
+        return res.status(409).json({message:"cpf invalido"});
+      }
+    }
     const column = Object.keys(fields);
     const values = Object.values(fields);
 
@@ -177,5 +217,29 @@ export async function deleteAdress(req: Request, res: Response) {
     return res.status(500).json({
       message: "Erro interno",
     });
+  }
+}
+
+export async function setDefaultAdress(req: Request, res: Response) {
+  try {
+    const userId = (req as any).user.id;
+    const adressId = Number(req.params.id);
+
+    await setDefaultAdressService(userId, adressId);
+
+    return res.status(200).json({ message: "Endereço padrão atualizado" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Erro ao definir endereço padrão" });
+  }
+}
+
+export async function getProducts(req: Request, res: Response) {
+  try {
+    const result = await getProductsService();
+    return res.status(200).json(result);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Erro ao buscar produtos" });
   }
 }
