@@ -10,6 +10,9 @@ import {
   setDefaultAdress,
   registerProduct,
   getProducts,
+  favoriteProduct,
+  getFavorites,
+  unfavoriteProduct,
 } from "../controllers/authcontroller";
 import { AuthenticateToken } from "../authenticateToken";
 import upload from "../config/multer";
@@ -25,4 +28,8 @@ router.delete("/delete-adress/:id", AuthenticateToken, deleteAdress);
 router.patch("/adress/:id/set-default", AuthenticateToken, setDefaultAdress);
 router.post("/register-product", upload.single("image"), registerProduct);
 router.get("/products",getProducts);
+
+router.post("/favorite-product",AuthenticateToken,favoriteProduct);
+router.get("/favorites", AuthenticateToken, getFavorites);
+router.delete("/favorites/:productId", AuthenticateToken, unfavoriteProduct);
 export default router;

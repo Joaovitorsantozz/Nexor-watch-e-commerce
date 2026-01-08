@@ -18,9 +18,9 @@ export async function registerUser(
   const result = await db.execute(sql2, [name, email, country, password]);
   return result;
 }
-export async function getProductsService(){
-  const sql="SELECT name,price,image_url FROM products WHERE active=1";
-  const[rows]=await db.execute(sql);
+export async function getProductsService() {
+  const sql = "SELECT id,name,price,image_url FROM products WHERE active=1";
+  const [rows] = await db.execute(sql);
   return rows;
 }
 export async function registerProductService(
@@ -28,7 +28,7 @@ export async function registerProductService(
   description: string,
   price: number,
   stock: number,
-  image: string |null,
+  image: string | null,
   active: boolean
 ) {
   const sql =
@@ -170,4 +170,36 @@ export async function editUserService(
   `;
 
   return db.query(query, [...values, userID]);
+}
+
+export async function favoriteProductService(
+  userId: number,
+  productId: number
+) {
+  const sql = `
+    INSERT INTO favorites (user_id, product_id)
+    VALUES (?, ?)
+  `;
+  return db.execute(sql, [userId, productId]);
+}
+
+export async function getFavoritesService(userId: number) {
+  const sql = `
+    SELECT product_id
+    FROM favorites
+    WHERE user_id = ?
+  `;
+  const [rows] = await db.execute(sql, [userId]);
+  return rows;
+}
+
+export async function unfavoriteProductService(
+  userId: number,
+  productId: number
+) {
+  const sql = `
+    DELETE FROM favorites
+    WHERE user_id = ? AND product_id = ?
+  `;
+  return db.execute(sql, [userId, productId]);
 }

@@ -311,12 +311,24 @@ div.item-unique {
   }
   & .item-information {
     margin-top: 30px;
-
+    position: relative;
     & .item-brand {
       font-size: 13px;
     }
     & .item-model {
       font-size: 22px !important;
+    }
+    & button{
+      width: 25px;
+      height: 25px;
+      top: 0;
+      right:10px;
+      position: absolute;
+      border:none;
+      background-color: transparent;
+      & img{
+        width: 100%;
+      }
     }
   }
   & a {

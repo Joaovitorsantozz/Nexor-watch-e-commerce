@@ -12,6 +12,9 @@ import {
   setDefaultAdressService,
   registerProductService,
   getProductsService,
+  favoriteProductService,
+  unfavoriteProductService,
+  getFavoritesService,
 } from "../services/authservice";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
@@ -187,7 +190,7 @@ export async function editUser(req: Request, res: Response) {
     }
     if(fields.cpf){
       if(!isValidCPF(fields.cpf)){
-        return res.status(409).json({message:"cpf invalido"});
+        return res.status(400).json({message:"cpf invalido"});
       }
     }
     const column = Object.keys(fields);
@@ -243,3 +246,45 @@ export async function getProducts(req: Request, res: Response) {
     return res.status(500).json({ message: "Erro ao buscar produtos" });
   }
 }
+
+export async function favoriteProduct(req: Request, res: Response) {
+  try {
+    const userId = (req as any).user.id;
+    const productId = req.body.product_id;
+
+    if (!productId) {
+      return res.status(400).json({ message: "product_id é obrigatório" });
+    }
+
+    await favoriteProductService(userId, productId);
+
+    return res.status(200).json({ message: "Adicionado aos favoritos" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Erro ao favoritar produto" });
+  }
+}
+
+export async function getFavorites(req: Request, res: Response) {
+  try {
+    const userId = (req as any).user.id;
+    const favorites = await getFavoritesService(userId);
+    return res.status(200).json(favorites);
+  } catch {
+    return res.status(500).json({ message: "Erro ao buscar favoritos" });
+  }
+}
+
+export async function unfavoriteProduct(req: Request, res: Response) {
+  try {
+    const userId = (req as any).user.id;
+    const productId = Number(req.params.productId);
+
+    await unfavoriteProductService(userId, productId);
+    return res.status(200).json({ message: "Removido dos favoritos" });
+  } catch {
+    return res.status(500).json({ message: "Erro ao desfavoritar" });
+  }
+}
+
+
