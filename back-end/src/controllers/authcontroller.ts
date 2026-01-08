@@ -15,6 +15,7 @@ import {
   favoriteProductService,
   unfavoriteProductService,
   getFavoritesService,
+  getFavoritesProductsService,
 } from "../services/authservice";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
@@ -188,9 +189,9 @@ export async function editUser(req: Request, res: Response) {
     if (!fields || Object.keys(fields).length == 0) {
       return res.status(400).json({ msg: "Nenhum campo para atualizar" });
     }
-    if(fields.cpf){
-      if(!isValidCPF(fields.cpf)){
-        return res.status(400).json({message:"cpf invalido"});
+    if (fields.cpf) {
+      if (!isValidCPF(fields.cpf)) {
+        return res.status(400).json({ message: "cpf invalido" });
       }
     }
     const column = Object.keys(fields);
@@ -287,4 +288,13 @@ export async function unfavoriteProduct(req: Request, res: Response) {
   }
 }
 
-
+export async function getFavoritesProducts(req: Request, res: Response) {
+  try {
+    const userid = (req as any).user.id;
+    const products = await getFavoritesProductsService(userid);
+    return res.status(200).json({products});
+  } catch (error) {
+    console.log("error");
+    res.status(500).json({ message: "erro ao requisitar produtos favoritos" });
+  }
+}

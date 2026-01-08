@@ -43,7 +43,7 @@ function ShopSec() {
       },
     });
 
-    // retorna array de product_id
+
     return res.data.map((f: any) => f.product_id);
   };
   useEffect(() => {
@@ -56,7 +56,7 @@ function ShopSec() {
     if (!token) return null;
     const isFavorite = favorites.includes(productId);
 
-    // optimistic UI
+
     setFavorites((prev) =>
       isFavorite ? prev.filter((id) => id !== productId) : [...prev, productId]
     );
@@ -68,7 +68,7 @@ function ShopSec() {
         await favoriteProduct(productId, token);
       }
     } catch {
-      // rollback
+    
       setFavorites((prev) =>
         isFavorite
           ? [...prev, productId]

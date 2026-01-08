@@ -13,6 +13,7 @@ import {
   favoriteProduct,
   getFavorites,
   unfavoriteProduct,
+  getFavoritesProducts,
 } from "../controllers/authcontroller";
 import { AuthenticateToken } from "../authenticateToken";
 import upload from "../config/multer";
@@ -32,4 +33,5 @@ router.get("/products",getProducts);
 router.post("/favorite-product",AuthenticateToken,favoriteProduct);
 router.get("/favorites", AuthenticateToken, getFavorites);
 router.delete("/favorites/:productId", AuthenticateToken, unfavoriteProduct);
+router.get("/get-favorite-products",AuthenticateToken,getFavoritesProducts);
 export default router;

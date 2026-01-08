@@ -203,3 +203,18 @@ export async function unfavoriteProductService(
   `;
   return db.execute(sql, [userId, productId]);
 }
+
+export async function getFavoritesProductsService(user_id: number) {
+  const sql = `
+    SELECT 
+      p.id,
+      p.name,
+      p.price,
+      p.image_url
+    FROM favorites f
+    INNER JOIN products p ON p.id = f.product_id
+    WHERE f.user_id = ?
+  `;
+  const [rows] = await db.execute(sql, [user_id]);
+  return rows;
+}

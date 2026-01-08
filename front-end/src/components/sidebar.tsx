@@ -30,7 +30,7 @@ function SideBar() {
 
         <li>
           <img src={fav} />
-          <a>Favoritos</a>
+          <Link to={"/favorite-page"}>Favoritos</Link>
         </li>
       </ul>
     </div>
