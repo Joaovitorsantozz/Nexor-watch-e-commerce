@@ -3,8 +3,11 @@ import sampleimg from "../assets/watch-sample.png";
 import Axios from "axios";
 import heartempty from "../assets/icons/heartempty.png";
 import heartfill from "../assets/icons/heartfill.png";
+import { useCart } from "../components/cartItens";
 let i = 0;
+
 function ShopSec() {
+  const { addToCart } = useCart();
   interface Product {
     id: number;
     image_url: string;
@@ -43,7 +46,6 @@ function ShopSec() {
       },
     });
 
-
     return res.data.map((f: any) => f.product_id);
   };
   useEffect(() => {
@@ -56,7 +58,6 @@ function ShopSec() {
     if (!token) return null;
     const isFavorite = favorites.includes(productId);
 
-
     setFavorites((prev) =>
       isFavorite ? prev.filter((id) => id !== productId) : [...prev, productId]
     );
@@ -68,7 +69,6 @@ function ShopSec() {
         await favoriteProduct(productId, token);
       }
     } catch {
-    
       setFavorites((prev) =>
         isFavorite
           ? [...prev, productId]
@@ -109,7 +109,19 @@ function ShopSec() {
                 <span className="item-price inter">R${product.price}</span>
               </div>
 
-              <a className="buy-button">Comprar</a>
+              <button
+                className="buy-button"
+                onClick={() =>
+                  addToCart({
+                    productId: product.id,
+                    name: product.name,
+                    price: Number(product.price),
+                    image_url: product.image_url,
+                  })
+                }
+              >
+                Comprar
+              </button>
             </div>
           ))}
         </div>

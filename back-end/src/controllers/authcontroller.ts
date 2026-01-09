@@ -201,7 +201,7 @@ export async function editUser(req: Request, res: Response) {
 
     return res.json({ message: "Campos alterados" });
   } catch (error) {
-    console.log("error", error);
+    console.log("Erro ao editar usuário", error);
   }
 }
 
