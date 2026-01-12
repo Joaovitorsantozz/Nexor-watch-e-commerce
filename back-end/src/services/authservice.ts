@@ -228,14 +228,39 @@ export async function registerOrderService(
   addressId: number,
   items: OrderItemInput[]
 ) {
-  if (!items || items.length === 0) {
+  if (!items || !Array.isArray(items) || items.length === 0) {
     throw new Error("Nenhum item enviado para o pedido");
   }
 
+  if (items.length > 50) {
+    throw new Error("Pedido excede o limite de itens");
+  }
+
+  // 🔒 Normaliza e valida itens
+  const normalizedItems = new Map<number, number>();
+
+  for (const item of items) {
+    if (
+      !Number.isInteger(item.productId) ||
+      !Number.isInteger(item.quantity) ||
+      item.quantity <= 0
+    ) {
+      throw new Error("Item inválido no pedido");
+    }
+
+    normalizedItems.set(
+      item.productId,
+      (normalizedItems.get(item.productId) || 0) + item.quantity
+    );
+  }
+
+  const productIds = [...normalizedItems.keys()];
   const conn = await db.getConnection();
+
   try {
     await conn.beginTransaction();
 
+   
     const [addressRows]: any = await conn.execute(
       "SELECT id FROM adressn WHERE id = ? AND userid = ?",
       [addressId, userId]
@@ -245,56 +270,63 @@ export async function registerOrderService(
       throw new Error("Endereço inválido");
     }
 
-    const productIds = items.map((item) => item.productId);
+   
     const [products]: any = await conn.execute(
-      `SELECT id, name, price, stock 
-       FROM products 
-       WHERE id IN (${productIds.map(() => "?").join(",")})`,
+      `
+      SELECT id, name, price, stock
+      FROM products
+      WHERE id IN (${productIds.map(() => "?").join(",")})
+      FOR UPDATE
+      `,
       productIds
     );
 
-    if (products.length !== items.length) {
+    if (products.length !== productIds.length) {
       throw new Error("Um ou mais produtos não existem");
     }
 
     let totalPrice = 0;
-    for (const item of items) {
-      const product = products.find((p: any) => p.id === item.productId);
 
-      if (!product) {
-        throw new Error("Produto inválido");
+    for (const product of products) {
+      const quantity = normalizedItems.get(product.id)!;
+
+      if (quantity > product.stock) {
+        throw new Error(`Estoque insuficiente para ${product.name}`);
       }
 
-      if (item.quantity > product.stock) {
-        throw new Error("Estoque insuficiente");
-      }
-
-      totalPrice += product.price * item.quantity;
+      totalPrice += product.price * quantity;
     }
 
+   
     const [orderResult]: any = await conn.execute(
-      `INSERT INTO orders (user_id, address_id, total_price, status)
-       VALUES (?, ?, ?, 'pending')`,
+      `
+      INSERT INTO orders (user_id, address_id, total_price, status)
+      VALUES (?, ?, ?, 'pending')
+      `,
       [userId, addressId, totalPrice]
     );
 
     const orderId = orderResult.insertId;
 
-    for (const item of items) {
-      const product = products.find((p: any) => p.id === item.productId);
+   
+    for (const product of products) {
+      const quantity = normalizedItems.get(product.id)!;
 
       await conn.execute(
-        `INSERT INTO order_items 
-         (order_id, product_id,unit_price, quantity)
-         VALUES (?, ?, ?, ?)`,
-        [orderId, product.id, product.price, item.quantity]
+        `
+        INSERT INTO order_items (order_id, product_id, unit_price, quantity)
+        VALUES (?, ?, ?, ?)
+        `,
+        [orderId, product.id, product.price, quantity]
       );
 
       await conn.execute(
-        `UPDATE products 
-         SET stock = stock - ?
-         WHERE id = ?`,
-        [item.quantity, product.id]
+        `
+        UPDATE products
+        SET stock = stock - ?
+        WHERE id = ?
+        `,
+        [quantity, product.id]
       );
     }
 
@@ -346,7 +378,7 @@ export async function getUserOrdersService(userId: number) {
         productId: i.product_id,
         name: i.name,
         image_url: i.image_url,
-        price: Number(i.unit_price), 
+        price: Number(i.unit_price),
         quantity: i.quantity,
       })),
   }));
