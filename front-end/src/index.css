@@ -979,3 +979,77 @@ div.quantity-buttons {
   flex: 1;
   height: 100%;
 }
+
+.order-section{
+  width: 100%;
+  height: 100vh;
+
+}
+
+.order-container{
+  width: 100%;
+  height: 100%;
+  display: flex;
+
+}
+
+main.order-content{
+  flex:1;
+  height: 100%;
+  padding-left: 100px;
+  padding-top: 20px;
+  & h1{
+    padding-bottom: 50px;
+  }
+}
+
+
+.order-card {
+  width: 80%;
+  background: #111;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.status.pending {
+  color: #f6ae2d;
+}
+
+.status.completed {
+  color: #4caf50;
+}
+
+.order-items {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.order-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.order-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.order-footer {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  opacity: 0.8;
+}

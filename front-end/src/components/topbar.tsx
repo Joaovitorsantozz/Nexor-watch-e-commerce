@@ -5,8 +5,9 @@ import profile from "../assets/icons/profile.png";
 import contact from "../assets/icons/contact.png";
 import shop from "../assets/icons/shop.png";
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
+
 import CartSidebar from "./cartSideBar";
+import { useCart } from "./cartItens";
 function TopBar() {
   interface CartItem{
     productid:number;
@@ -16,8 +17,8 @@ function TopBar() {
     quantity:number;
   }
   const location = useLocation();
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [cart, setCart] = useState<CartItem[]>([]);
+ 
+  const { isCartOpen, openCart, closeCart } = useCart();
   return (
     <>
       <div className="topbar">
@@ -39,7 +40,7 @@ function TopBar() {
             {location.pathname === "/user-profile" ? (
               <>
                 <ul style={{ justifyContent: "end" }}>
-                  <li onClick={() => setIsCartOpen(true)}>
+                  <li onClick={openCart}>
                     <img src={market} style={{ cursor: "pointer" }} />
                   </li>
                   <li>
@@ -58,7 +59,7 @@ function TopBar() {
                   <li>
                     <img src={fav}></img>
                   </li>
-                  <li onClick={() => setIsCartOpen(true)}>
+                  <li onClick={openCart}>
                     <img src={market} style={{ cursor: "pointer" }} />
                   </li>
                   <li>
@@ -81,7 +82,7 @@ function TopBar() {
           </ul>
         </div>
       </div>
-      <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
+        <CartSidebar isOpen={isCartOpen} onClose={closeCart} />
     </>
   );
 }

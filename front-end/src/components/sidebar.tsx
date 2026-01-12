@@ -20,7 +20,7 @@ function SideBar() {
 
         <li>
           <img src={shopbag} />
-          <a>Pedidos</a>
+          <Link to={"/orders-page"}>Meus pedidos</Link>
         </li>
 
         <li>

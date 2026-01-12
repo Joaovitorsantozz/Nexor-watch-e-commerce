@@ -6,8 +6,8 @@ export interface CartItem {
   price: number;
   image_url: string;
   quantity: number;
+  stock: number;
 }
-
 type CartContextType = {
   cart: CartItem[];
   addToCart: (product: Omit<CartItem, "quantity">) => void;
@@ -15,12 +15,19 @@ type CartContextType = {
   clearCart: () => void;
   increaseQuantity: (id: number) => void;
   decreaseQuantity: (id: number) => void;
-  subtotal:number;
+  subtotal: number;
+  isCartOpen: boolean;
+  openCart: () => void;
+  closeCart: () => void;
 };
 
 const CartContext = createContext<CartContextType | null>(null);
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const openCart = () => setIsCartOpen(true);
+  const closeCart = () => setIsCartOpen(false);
   const [cart, setCart] = useState<CartItem[]>(() => {
     const stored = localStorage.getItem("cart");
     return stored ? JSON.parse(stored) : [];
@@ -54,9 +61,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
   const increaseQuantity = (id: number) => {
     setCart((prev) =>
-      prev.map((p) =>
-        p.productId === id ? { ...p, quantity: p.quantity + 1 } : p
-      )
+      prev.map((p) => {
+        if (p.productId !== id) return p;
+
+        if (p.quantity >= p.stock) {
+          return p;
+        }
+
+        return { ...p, quantity: p.quantity + 1 };
+      })
     );
   };
 
@@ -81,6 +94,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         increaseQuantity,
         decreaseQuantity,
         subtotal,
+        isCartOpen,
+        openCart,
+        closeCart,
       }}
     >
       {children}

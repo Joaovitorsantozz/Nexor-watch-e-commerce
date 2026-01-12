@@ -19,7 +19,8 @@ export async function registerUser(
   return result;
 }
 export async function getProductsService() {
-  const sql = "SELECT id,name,price,image_url FROM products WHERE active=1";
+  const sql =
+    "SELECT id,name,price,stock,image_url FROM products WHERE active=1";
   const [rows] = await db.execute(sql);
   return rows;
 }
@@ -217,4 +218,136 @@ export async function getFavoritesProductsService(user_id: number) {
   `;
   const [rows] = await db.execute(sql, [user_id]);
   return rows;
+}
+type OrderItemInput = {
+  productId: number;
+  quantity: number;
+};
+export async function registerOrderService(
+  userId: number,
+  addressId: number,
+  items: OrderItemInput[]
+) {
+  if (!items || items.length === 0) {
+    throw new Error("Nenhum item enviado para o pedido");
+  }
+
+  const conn = await db.getConnection();
+  try {
+    await conn.beginTransaction();
+
+    const [addressRows]: any = await conn.execute(
+      "SELECT id FROM adressn WHERE id = ? AND userid = ?",
+      [addressId, userId]
+    );
+
+    if (addressRows.length === 0) {
+      throw new Error("Endereço inválido");
+    }
+
+    const productIds = items.map((item) => item.productId);
+    const [products]: any = await conn.execute(
+      `SELECT id, name, price, stock 
+       FROM products 
+       WHERE id IN (${productIds.map(() => "?").join(",")})`,
+      productIds
+    );
+
+    if (products.length !== items.length) {
+      throw new Error("Um ou mais produtos não existem");
+    }
+
+    let totalPrice = 0;
+    for (const item of items) {
+      const product = products.find((p: any) => p.id === item.productId);
+
+      if (!product) {
+        throw new Error("Produto inválido");
+      }
+
+      if (item.quantity > product.stock) {
+        throw new Error("Estoque insuficiente");
+      }
+
+      totalPrice += product.price * item.quantity;
+    }
+
+    const [orderResult]: any = await conn.execute(
+      `INSERT INTO orders (user_id, address_id, total_price, status)
+       VALUES (?, ?, ?, 'pending')`,
+      [userId, addressId, totalPrice]
+    );
+
+    const orderId = orderResult.insertId;
+
+    for (const item of items) {
+      const product = products.find((p: any) => p.id === item.productId);
+
+      await conn.execute(
+        `INSERT INTO order_items 
+         (order_id, product_id,unit_price, quantity)
+         VALUES (?, ?, ?, ?)`,
+        [orderId, product.id, product.price, item.quantity]
+      );
+
+      await conn.execute(
+        `UPDATE products 
+         SET stock = stock - ?
+         WHERE id = ?`,
+        [item.quantity, product.id]
+      );
+    }
+
+    await conn.commit();
+    return orderId;
+  } catch (error) {
+    await conn.rollback();
+    throw error;
+  } finally {
+    conn.release();
+  }
+}
+
+export async function getUserOrdersService(userId: number) {
+  const [orders]: any = await db.execute(
+    `SELECT id, status, total_price, created_at
+     FROM orders
+     WHERE user_id = ?
+     ORDER BY created_at DESC`,
+    [userId]
+  );
+
+  if (orders.length === 0) return [];
+
+  const orderIds = orders.map((o: any) => o.id);
+
+  const [items]: any = await db.execute(
+    `SELECT 
+        oi.order_id,
+        oi.product_id,
+        oi.unit_price,
+        oi.quantity,
+        p.name,
+        p.image_url
+     FROM order_items oi
+     INNER JOIN products p ON p.id = oi.product_id
+     WHERE oi.order_id IN (${orderIds.map(() => "?").join(",")})`,
+    orderIds
+  );
+
+  return orders.map((order: any) => ({
+    id: order.id,
+    status: order.status,
+    total_price: Number(order.total_price),
+    created_at: order.created_at,
+    items: items
+      .filter((i: any) => i.order_id === order.id)
+      .map((i: any) => ({
+        productId: i.product_id,
+        name: i.name,
+        image_url: i.image_url,
+        price: Number(i.unit_price), 
+        quantity: i.quantity,
+      })),
+  }));
 }

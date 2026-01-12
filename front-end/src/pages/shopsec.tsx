@@ -7,12 +7,13 @@ import { useCart } from "../components/cartItens";
 let i = 0;
 
 function ShopSec() {
-  const { addToCart } = useCart();
+  const { addToCart,openCart} = useCart();
   interface Product {
     id: number;
     image_url: string;
     name: string;
     price: string;
+    stock: string;
   }
   const [products, setProducts] = useState<Product[]>([]);
   const [favorites, setFavorites] = useState<number[]>([]);
@@ -76,6 +77,8 @@ function ShopSec() {
       );
     }
   };
+ 
+
   return (
     <section className="shop-section">
       <div className="shop-container">
@@ -111,14 +114,16 @@ function ShopSec() {
 
               <button
                 className="buy-button"
-                onClick={() =>
+                onClick={() => {
                   addToCart({
                     productId: product.id,
                     name: product.name,
                     price: Number(product.price),
                     image_url: product.image_url,
-                  })
-                }
+                    stock: Number(product.stock),
+                  });
+                  openCart();
+                }}
               >
                 Comprar
               </button>
