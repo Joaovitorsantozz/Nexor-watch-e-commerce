@@ -24,6 +24,12 @@ export async function getProductsService() {
   const [rows] = await db.execute(sql);
   return rows;
 }
+export async function getAllProductsService() {
+  const sql =
+    "SELECT id,name,price,stock,image_url FROM products";
+  const [rows] = await db.execute(sql);
+  return rows;
+}
 export async function registerProductService(
   name: string,
   description: string,
@@ -236,7 +242,6 @@ export async function registerOrderService(
     throw new Error("Pedido excede o limite de itens");
   }
 
-  // 🔒 Normaliza e valida itens
   const normalizedItems = new Map<number, number>();
 
   for (const item of items) {
@@ -260,7 +265,6 @@ export async function registerOrderService(
   try {
     await conn.beginTransaction();
 
-   
     const [addressRows]: any = await conn.execute(
       "SELECT id FROM adressn WHERE id = ? AND userid = ?",
       [addressId, userId]
@@ -270,7 +274,6 @@ export async function registerOrderService(
       throw new Error("Endereço inválido");
     }
 
-   
     const [products]: any = await conn.execute(
       `
       SELECT id, name, price, stock
@@ -297,18 +300,16 @@ export async function registerOrderService(
       totalPrice += product.price * quantity;
     }
 
-   
     const [orderResult]: any = await conn.execute(
       `
       INSERT INTO orders (user_id, address_id, total_price, status)
-      VALUES (?, ?, ?, 'pending')
+      VALUES (?, ?, ?, 'PAYMENT_PENDING')
       `,
       [userId, addressId, totalPrice]
     );
 
     const orderId = orderResult.insertId;
 
-   
     for (const product of products) {
       const quantity = normalizedItems.get(product.id)!;
 
@@ -320,7 +321,7 @@ export async function registerOrderService(
         [orderId, product.id, product.price, quantity]
       );
 
-      await conn.execute(
+      /*await conn.execute(
         `
         UPDATE products
         SET stock = stock - ?
@@ -328,6 +329,9 @@ export async function registerOrderService(
         `,
         [quantity, product.id]
       );
+      */
+      // essa parte ta dando baixa no estoque mesmo antes do pagamento, o que nao deveria, então precisa ter um outro
+      // service que vai ser acionado quando o cliente fizer o pagamento e ai sim ele vai dar baixa no sistema
     }
 
     await conn.commit();
@@ -382,4 +386,39 @@ export async function getUserOrdersService(userId: number) {
         quantity: i.quantity,
       })),
   }));
+}
+
+  export async function getProductByIdService(productId: number) {
+    const sql = "SELECT * from products WHERE id=?";
+    const [rows] = await db.execute<RowDataPacket[]>(sql, [productId]);
+    return rows;
+  }
+
+  export async function updateProductService(
+  productId: number,
+  fields: Record<string, any>
+) {
+  const updates = [];
+  const values = [];
+
+  for (const key in fields) {
+    updates.push(`${key} = ?`);
+    values.push(fields[key]);
+  }
+
+  values.push(productId);
+
+  const sql = `
+    UPDATE products
+    SET ${updates.join(", ")}
+    WHERE id = ?
+  `;
+
+  await db.execute(sql, values);
+}
+
+export async function deleteProductService(productId: number) { 
+  const sql = "DELETE FROM products WHERE id = ?";
+  const [result] = await db.execute(sql, [productId]);
+  return result;
 }

@@ -18,8 +18,10 @@ function LoginPage() {
         //deu certo
         const token = response.data.token;
         if (token) {
+          const role = response.data.user.role;
           alert(response.data.message);
           localStorage.setItem("token", token);
+          localStorage.setItem("role",role);
           navigate("/user-profile");
         } else {
           alert("Erro ao logar, verifique o email e a senha");

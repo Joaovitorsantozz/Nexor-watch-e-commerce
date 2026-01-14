@@ -4,11 +4,15 @@ import Home from "./pages/home";
 import { Route, Routes } from "react-router-dom";
 import UserProfile from "./pages/userProfile";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminProtectedRoute from "./components/AdminProtectedRoute";
 import AdressPage from "./pages/adressPage";
 import AdressRegisterPage from "./pages/adressPageRegister";
 import RegisterProducts from "./pages/registerProducts";
 import FavoritePage from "./pages/favoritesPage";
 import OrdersPage from "./pages/ordersPage";
+import AdminPage from "./pages/Admin/adminPage,";
+import RegisteredProducts from "./pages/Admin/registeredProducts";
+import ProductPage from "./pages/Admin/productPage";
 //preciso dar um jeito de proteger a rota de registrar produtos,
 //talvez por um token diferente? adicionar o campo isAdmin na table user também
 function App() {
@@ -53,12 +57,36 @@ function App() {
           </ProtectedRoute>
         }
       ></Route>
-            <Route
+      <Route
         path="/orders-page"
         element={
           <ProtectedRoute>
             <OrdersPage></OrdersPage>
           </ProtectedRoute>
+        }
+      ></Route>
+      <Route
+        path="/admin"
+        element={
+          <AdminProtectedRoute>
+            <AdminPage></AdminPage>
+          </AdminProtectedRoute>
+        }
+      ></Route>
+      <Route
+        path="/registered-products"
+        element={
+          <AdminProtectedRoute>
+            <RegisteredProducts></RegisteredProducts>
+          </AdminProtectedRoute>
+        }
+      ></Route>
+      <Route
+        path="/edit-product/:id"
+        element={
+          <AdminProtectedRoute>
+            <ProductPage></ProductPage>
+          </AdminProtectedRoute>
         }
       ></Route>
     </Routes>

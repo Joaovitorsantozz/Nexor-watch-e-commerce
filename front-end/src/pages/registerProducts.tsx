@@ -1,6 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Axios from "axios";
 import * as yup from "yup";
+import AdminSideBar from "./Admin/adminSideBar";
 function RegisterProducts() {
   interface Product {
     name: string;
@@ -66,92 +67,96 @@ function RegisterProducts() {
 
   return (
     <section className="register-products-section">
-      <h1 className="inter">Cadastrar produtos</h1>
-      <div className="register-products-container">
-        <Formik
-          onSubmit={handleRegister}
-          validationSchema={validateRegister}
-          initialValues={{
-            name: "",
-            description: "",
-            price: "",
-            stock: "",
-            image: null,
-            active: true,
-          }}
-        >
-          {({ setFieldValue }) => (
-            <Form>
-              <div className="form-row">
-                <div className="form-column">
-                  <label className="inter">Nome do produto</label>
-                  <Field
-                    className="name"
-                    name="name"
-                    type="text"
-                    placeholder="Insira o nome do produto"
-                  />
+      <AdminSideBar></AdminSideBar>
+      <main className="register-products-content">
+        <h1 className="inter">Cadastrar produtos</h1>
+
+        <div className="register-products-container">
+          <Formik
+            onSubmit={handleRegister}
+            validationSchema={validateRegister}
+            initialValues={{
+              name: "",
+              description: "",
+              price: "",
+              stock: "",
+              image: null,
+              active: true,
+            }}
+          >
+            {({ setFieldValue }) => (
+              <Form>
+                <div className="form-row">
+                  <div className="form-column">
+                    <label className="inter">Nome do produto</label>
+                    <Field
+                      className="name"
+                      name="name"
+                      type="text"
+                      placeholder="Insira o nome do produto"
+                    />
+                  </div>
+
+                  <div className="form-column">
+                    <label className="inter">Preço</label>
+                    <Field
+                      className="price"
+                      name="price"
+                      type="number"
+                      step="0.01"
+                      placeholder="Ex: 499.90"
+                    />
+                  </div>
+
+                  <div className="form-column">
+                    <label className="inter">Estoque</label>
+                    <Field
+                      className="stock"
+                      name="stock"
+                      type="number"
+                      placeholder="Quantidade em estoque"
+                    />
+                  </div>
                 </div>
 
-                <div className="form-column">
-                  <label className="inter">Preço</label>
-                  <Field
-                    className="price"
-                    name="price"
-                    type="number"
-                    step="0.01"
-                    placeholder="Ex: 499.90"
-                  />
-                </div>
+                <div className="form-row">
+                  <div className="form-column">
+                    <label className="inter">Imagem (URL)</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        if (e.currentTarget.files) {
+                          setFieldValue("image", e.currentTarget.files[0]);
+                        }
+                      }}
+                    />
+                  </div>
 
-                <div className="form-column">
-                  <label className="inter">Estoque</label>
-                  <Field
-                    className="stock"
-                    name="stock"
-                    type="number"
-                    placeholder="Quantidade em estoque"
-                  />
-                </div>
-              </div>
+                  <div className="form-column">
+                    <label className="inter">Descrição</label>
+                    <Field
+                      className="description"
+                      name="description"
+                      as="textarea"
+                      placeholder="Descrição do produto"
+                    />
+                  </div>
 
-              <div className="form-row">
-                <div className="form-column">
-                  <label className="inter">Imagem (URL)</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      if (e.currentTarget.files) {
-                        setFieldValue("image", e.currentTarget.files[0]);
-                      }
-                    }}
-                  />
+                  <div className="form-column">
+                    <label className="inter">Produto ativo</label>
+                    <Field className="active" name="active" as="select">
+                      <option value={1}>Sim</option>
+                      <option value={0}>Não</option>
+                    </Field>
+                  </div>
                 </div>
-
-                <div className="form-column">
-                  <label className="inter">Descrição</label>
-                  <Field
-                    className="description"
-                    name="description"
-                    as="textarea"
-                    placeholder="Descrição do produto"
-                  />
-                </div>
-
-                <div className="form-column">
-                  <label className="inter">Produto ativo</label>
-                  <Field className="active" name="active" as="select">
-                    <option value={1}>Sim</option>
-                    <option value={0}>Não</option>
-                  </Field>
-                </div>
-              </div>
-              <button type="submit">Cadastrar</button>
-            </Form>
-          )}
-        </Formik>
-      </div>
+                <button type="submit">Cadastrar</button>
+              </Form>
+            )}
+          </Formik>
+        </div>
+      </main>
     </section>
   );
 }
