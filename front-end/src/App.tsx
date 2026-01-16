@@ -13,6 +13,9 @@ import OrdersPage from "./pages/ordersPage";
 import AdminPage from "./pages/Admin/adminPage,";
 import RegisteredProducts from "./pages/Admin/registeredProducts";
 import ProductPage from "./pages/Admin/productPage";
+import SearchUserPage from "./pages/Admin/searchUser";
+import OrdersPageAdmin from "./pages/Admin/ordersPageAdmin";
+import OrderSinglePage from "./pages/Admin/orderSinglePage";
 //preciso dar um jeito de proteger a rota de registrar produtos,
 //talvez por um token diferente? adicionar o campo isAdmin na table user também
 function App() {
@@ -86,6 +89,30 @@ function App() {
         element={
           <AdminProtectedRoute>
             <ProductPage></ProductPage>
+          </AdminProtectedRoute>
+        }
+      ></Route>
+      <Route
+        path="/search-user"
+        element={
+          <AdminProtectedRoute>
+            <SearchUserPage></SearchUserPage>
+          </AdminProtectedRoute>
+        }
+      ></Route>
+      <Route
+        path="/admin-orders-page"
+        element={
+          <AdminProtectedRoute>
+            <OrdersPageAdmin></OrdersPageAdmin>
+          </AdminProtectedRoute>
+        }
+      ></Route>
+      <Route
+        path="/admin/orders/:id"
+        element={
+          <AdminProtectedRoute>
+            <OrderSinglePage></OrderSinglePage>
           </AdminProtectedRoute>
         }
       ></Route>

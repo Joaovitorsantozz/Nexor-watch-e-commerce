@@ -38,7 +38,7 @@ function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("DATAA", res.data);
+  
       setAdresses(res.data);
 
       const defaultAdress = res.data.find((a: Address) => a.is_default === 1);

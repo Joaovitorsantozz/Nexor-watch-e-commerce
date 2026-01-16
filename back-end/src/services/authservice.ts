@@ -25,8 +25,7 @@ export async function getProductsService() {
   return rows;
 }
 export async function getAllProductsService() {
-  const sql =
-    "SELECT id,name,price,stock,image_url FROM products";
+  const sql = "SELECT id,name,price,stock,image_url FROM products";
   const [rows] = await db.execute(sql);
   return rows;
 }
@@ -388,13 +387,13 @@ export async function getUserOrdersService(userId: number) {
   }));
 }
 
-  export async function getProductByIdService(productId: number) {
-    const sql = "SELECT * from products WHERE id=?";
-    const [rows] = await db.execute<RowDataPacket[]>(sql, [productId]);
-    return rows;
-  }
+export async function getProductByIdService(productId: number) {
+  const sql = "SELECT * from products WHERE id=?";
+  const [rows] = await db.execute<RowDataPacket[]>(sql, [productId]);
+  return rows;
+}
 
-  export async function updateProductService(
+export async function updateProductService(
   productId: number,
   fields: Record<string, any>
 ) {
@@ -417,8 +416,100 @@ export async function getUserOrdersService(userId: number) {
   await db.execute(sql, values);
 }
 
-export async function deleteProductService(productId: number) { 
+export async function deleteProductService(productId: number) {
   const sql = "DELETE FROM products WHERE id = ?";
   const [result] = await db.execute(sql, [productId]);
   return result;
+}
+export async function searchUserService(email: string) {
+  const [rows] = await db.query(
+    `
+    SELECT *
+    FROM usern
+    WHERE email LIKE ?
+    LIMIT 10
+    `,
+    [`%${email}%`]
+  );
+
+  return rows;
+}
+
+export async function GetAllOrdersService() {
+  const [rows] = await db.query(
+    `
+    SELECT *
+    FROM orders
+    ORDER BY created_at DESC
+    `
+  );
+
+  return rows;
+}
+
+export async function getOrderByIdService(orderId: number) {
+  const [orderRows]: any = await db.query(
+    `
+    SELECT 
+      o.id,
+      o.created_at,
+      o.total_price,
+      o.status,
+      u.name AS user_name,
+      u.email AS user_email
+    FROM orders o
+    JOIN usern u ON u.id = o.user_id
+    WHERE o.id = ?
+    `,
+    [orderId]
+  );
+
+  if (!orderRows || orderRows.length === 0) {
+    return null;
+  }
+
+  const order = orderRows[0];
+
+  const [items]: any = await db.query(
+    `
+    SELECT
+      p.name,
+      p.image_url,
+      oi.quantity,
+      oi.unit_price
+    FROM order_items oi
+    JOIN products p ON p.id = oi.product_id
+    WHERE oi.order_id = ?
+    `,
+    [orderId]
+  );
+
+  return {
+    id: order.id,
+    createdAt: order.created_at,
+    status: order.status,
+    totalPrice: order.total_price,
+    user: {
+      name: order.user_name,
+      email: order.user_email,
+    },
+    items: items || [],
+  };
+}
+export async function updateOrderStatusService(
+  orderId: number,
+  status: "PAID" | "CANCELLED"
+) {
+  const [result]: any = await db.query(
+    `
+    UPDATE orders
+    SET status = ?, updated_at = NOW()
+    WHERE id = ?
+    `,
+    [status, orderId]
+  );
+
+  if (result.affectedRows === 0) {
+    throw new Error("Pedido não encontrado");
+  }
 }

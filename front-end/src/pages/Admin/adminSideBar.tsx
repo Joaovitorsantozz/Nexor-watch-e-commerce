@@ -19,8 +19,8 @@ function AdminSideBar() {
         <ul className="admin-options-list">
           <li className="inter"><img src={admineditIcon}></img><Link to={"/register-products"}>Adicionar produto</Link></li>
           <li className="inter"><img src={product}></img><Link to={"/registered-products"}>Produtos cadastrados</Link></li>
-          <li className="inter"><img src={user}></img>Buscar usuários pro email</li>
-          <li className="inter"><img src={orders}></img>Pedidos pendentes</li>
+          <li className="inter"><img src={user}></img><Link to="/search-user">Buscar usuários pro email</Link></li>
+          <li className="inter"><img src={orders}></img><Link to ="/admin-orders-page">Pedidos pendentes</Link></li>
         </ul>
       </div>
     </div>

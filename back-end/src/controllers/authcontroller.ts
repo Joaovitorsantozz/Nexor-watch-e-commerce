@@ -22,6 +22,10 @@ import {
   updateProductService,
   getAllProductsService,
   deleteProductService,
+  searchUserService,
+  GetAllOrdersService,
+  getOrderByIdService,
+  updateOrderStatusService,
 } from "../services/authservice";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
@@ -144,7 +148,6 @@ export async function login(req: Request, res: Response) {
       process.env.JWT_TOKEN!,
       { expiresIn: "5h" }
     );
-    console.log("SEU TOKEN", token);
     return res.status(200).json({
       message: "Usuario Logado",
       user: safeUser,
@@ -453,4 +456,71 @@ export async function deleteProduct(req: Request, res: Response) {
 
     return res.status(500).json({ message: "Erro interno" });
   }
+}
+
+export async function searchUserController(req: Request, res: Response) {
+  const { email } = req.query;
+
+  if (!email || typeof email !== "string") {
+    return res.status(400).json({ message: "Email query is required" });
+  }
+
+  try {
+    const users = await searchUserService(email);
+    return res.json(users);
+  } catch (err) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export async function GetAllOrders(
+  req: Request,
+  res: Response
+) {
+  try {
+    const orders = await GetAllOrdersService();
+
+    return res.status(200).json(orders);
+  } catch (error) {
+    return res.status(500).json({
+      message: "Erro ao listar pedidos",
+    });
+  }
+}
+
+export async function getOrderByIdController(
+  req: Request,
+  res: Response
+) {
+  const { id } = req.params;
+
+  try {
+    const order = await getOrderByIdService(Number(id));
+
+    if (!order) {
+      return res.status(404).json({ message: "Pedido não encontrado" });
+    }
+
+    return res.status(200).json(order);
+  } catch (error) {
+    return res.status(500).json({
+      message: "Erro ao buscar pedido",
+    });
+  }
+}
+
+export async function updateOrderStatusController(
+  req: Request,
+  res: Response
+) {
+  const orderId = Number(req.params.id);
+  const { status } = req.body;
+
+  if (!["PAID", "CANCELLED"].includes(status)) {
+    return res.status(400).json({ message: "Status inválido" });
+  }
+
+  await updateOrderStatusService(orderId, status);
+
+  return res.status(200).json({ message: "Status atualizado com sucesso" });
 }
