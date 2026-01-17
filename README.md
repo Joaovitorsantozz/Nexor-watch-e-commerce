@@ -1,35 +1,9 @@
-**# Nexor Watch E-commerce**
+# NEXOR WATCH E-COMMERCE
 
 E-commerce full-stack desenvolvido com React, TypeScript, Node.js e Express, 
 com autenticação JWT, fluxo completo de pedidos e painel administrativo.
 
-**# Demonstração Usuário**
-1)Página Inicial
-<img width="1920" height="2877" alt="image" src="https://github.com/user-attachments/assets/8231e45b-6c5e-4a7f-b8f3-a33cd5c4024d" />
-
-2)Carrinho
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f767f97e-73e2-41c6-9c16-a2360f9ee840" />
-
-3)Pedidos feitos 
-<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/65124408-f813-4268-af64-6315467a2c2a" />
-
-4)Área do Usuário / Endereços Cadastrados / Área dos Favoritos
-<img width="1891" height="3011" alt="image" src="https://github.com/user-attachments/assets/b7a268dc-364b-48f2-8878-b2d222e588fb" />
-
-**# Demonstração Admin**
-
-1) Cadastrar produtos / Editar produtos
-<img width="1920" height="2151" alt="image" src="https://github.com/user-attachments/assets/7f699dac-e619-4f46-a494-5fa77c47395f" />
-
-2) Procurar usuários por email (sem expor informações sensíveis)
-<img width="1898" height="1080" alt="image" src="https://github.com/user-attachments/assets/024af2a0-85af-48ad-a258-fa3186c94054" />
-
-3)Verificar pedidos pendentes / Alterar roles de status do pedidos
-<img width="1920" height="1882" alt="image" src="https://github.com/user-attachments/assets/b5211ab2-db4f-4972-8752-2d8bf273f9cd" />
-
-
-
-#TECNOLOGIAS UTILIZADAS
+# TECNOLOGIAS UTILIZADAS
 
 ### Front-end
  - React 
@@ -82,5 +56,33 @@ com autenticação JWT, fluxo completo de pedidos e painel administrativo.
 - Routes: definição das rotas
 - Middlewares: autenticação e validações
 
+# DEMONSTRAÇÃO USUÁRIO
+
+1)Página Inicial
+
+<img width="1920" height="2877" alt="image" src="https://github.com/user-attachments/assets/8231e45b-6c5e-4a7f-b8f3-a33cd5c4024d" />
+
+2)Carrinho
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f767f97e-73e2-41c6-9c16-a2360f9ee840" />
+
+3)Pedidos feitos 
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/65124408-f813-4268-af64-6315467a2c2a" />
+
+4)Área do Usuário / Endereços Cadastrados / Área dos Favoritos
+<img width="1891" height="3011" alt="image" src="https://github.com/user-attachments/assets/b7a268dc-364b-48f2-8878-b2d222e588fb" />
+
+# DEMONSTRAÇÃO ADMIN
+
+1) Cadastrar produtos / Editar produtos
+<img width="1920" height="2118" alt="image" src="https://github.com/user-attachments/assets/1215ef23-32e2-448e-bec7-adc0a12c2707" />
+
+2) Procurar usuários por email (sem expor informações sensíveis)
+<img width="1898" height="1080" alt="image" src="https://github.com/user-attachments/assets/024af2a0-85af-48ad-a258-fa3186c94054" />
+
+3)Verificar pedidos pendentes / Alterar roles de status do pedidos
+<img width="1920" height="1882" alt="image" src="https://github.com/user-attachments/assets/b5211ab2-db4f-4972-8752-2d8bf273f9cd" />
 
 
+# OBSERVAÇÃO
+
+Caso queria testar, segue o dump do db https://drive.google.com/file/d/1O0wXsCMZsBg7IbBCOkh_PDQvu2GWI5st/view?usp=sharing
