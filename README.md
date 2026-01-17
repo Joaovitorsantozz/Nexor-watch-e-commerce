@@ -25,7 +25,8 @@ com autenticação JWT, fluxo completo de pedidos e painel administrativo.
 <img width="1898" height="1080" alt="image" src="https://github.com/user-attachments/assets/024af2a0-85af-48ad-a258-fa3186c94054" />
 
 3)Verificar pedidos pendentes / Alterar roles de status do pedidos
-<img width="1920" height="5000" alt="image" src="https://github.com/user-attachments/assets/95e6742e-3253-436c-b77f-7ed2bacae688" />
+<img width="1920" height="1882" alt="image" src="https://github.com/user-attachments/assets/b5211ab2-db4f-4972-8752-2d8bf273f9cd" />
+
 
 
 #TECNOLOGIAS UTILIZADAS
