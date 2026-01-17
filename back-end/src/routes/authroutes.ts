@@ -1,33 +1,38 @@
 import express from "express";
+import { register, login } from "../controllers/authcontroller";
+import { AuthenticateToken } from "../authenticateToken";
+import upload from "../config/multer";
+import { requireAdmin } from "../authenticateAdminToken";
 import {
-  register,
-  login,
-  getUser,
-  editUser,
-  adressRegister,
-  getAdress,
-  deleteAdress,
-  setDefaultAdress,
-  registerProduct,
-  getProducts,
-  favoriteProduct,
-  getFavorites,
-  unfavoriteProduct,
-  getFavoritesProducts,
-  orderRegister,
   getMyOrders,
-  getProductByID,
   updateProduct,
-  getAllProducts,
   deleteProduct,
   searchUserController,
   GetAllOrders,
   getOrderByIdController,
   updateOrderStatusController,
-} from "../controllers/authcontroller";
-import { AuthenticateToken } from "../authenticateToken";
-import upload from "../config/multer";
-import { requireAdmin } from "../authenticateAdminToken";
+} from "../controllers/admincontroller";
+import {
+  adressRegister,
+  getAdress,
+  deleteAdress,
+  setDefaultAdress,
+} from "../controllers/adresscontroller";
+import {
+  getProducts,
+  favoriteProduct,
+  getFavorites,
+  unfavoriteProduct,
+  getFavoritesProducts,
+  registerProduct,
+  getAllProducts,
+  getProductByID,
+} from "../controllers/productcontroller";
+import {
+  getUser,
+  editUser,
+  orderRegister,
+} from "../controllers/usercontroller";
 
 const router = express.Router();
 
