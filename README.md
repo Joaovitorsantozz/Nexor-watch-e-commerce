@@ -3,7 +3,7 @@
 E-commerce full-stack desenvolvido com React, TypeScript, Node.js e Express, 
 com autenticação JWT, fluxo completo de pedidos e painel administrativo.
 
-# TECNOLOGIAS UTILIZADAS
+## TECNOLOGIAS UTILIZADAS
 
 ### Front-end
  - React 
@@ -22,7 +22,7 @@ com autenticação JWT, fluxo completo de pedidos e painel administrativo.
   - MySQL
 
 
-# FUNCIONALIDADES
+## FUNCIONALIDADES
 
 ### Usuário
 - Cadastro e login com autenticação JWT
@@ -48,7 +48,7 @@ com autenticação JWT, fluxo completo de pedidos e painel administrativo.
 - Atualização do status do pedido
 - Listagem de usuários por email
 
-# ARQUITETURA
+## ARQUITETURA
  O projeto segue uma arquitetura em camadas:
 
 - Controllers: recebem requisições HTTP
@@ -56,7 +56,7 @@ com autenticação JWT, fluxo completo de pedidos e painel administrativo.
 - Routes: definição das rotas
 - Middlewares: autenticação e validações
 
-# DEMONSTRAÇÃO USUÁRIO
+## DEMONSTRAÇÃO USUÁRIO
 
 1)Página Inicial
 
@@ -71,7 +71,7 @@ com autenticação JWT, fluxo completo de pedidos e painel administrativo.
 4)Área do Usuário / Endereços Cadastrados / Área dos Favoritos
 <img width="1891" height="3011" alt="image" src="https://github.com/user-attachments/assets/b7a268dc-364b-48f2-8878-b2d222e588fb" />
 
-# DEMONSTRAÇÃO ADMIN
+## DEMONSTRAÇÃO ADMIN
 
 1) Cadastrar produtos / Editar produtos
 <img width="1920" height="2118" alt="image" src="https://github.com/user-attachments/assets/1215ef23-32e2-448e-bec7-adc0a12c2707" />
@@ -85,4 +85,27 @@ com autenticação JWT, fluxo completo de pedidos e painel administrativo.
 
 # OBSERVAÇÃO
 
-Caso queria testar, segue o dump do db https://drive.google.com/file/d/1O0wXsCMZsBg7IbBCOkh_PDQvu2GWI5st/view?usp=sharing
+Caso queria testar, segue abaixo os requisitos
+
+### 1 ) Instalar/Rodar as dependências do front-end
+- cd Nexor\front-end
+- npm install
+- npm run dev
+
+### 2) Instalar/Rodar Dependências do back-end
+- cd Nexor\back-end 
+- npm install 
+- Por questões de segurança, o .env não é compartilhado, por isso é preciso criar um .env local e colocar as chaves :
+  - DB_HOST,DB_USER
+  - DB_PASSWORD
+  - DB_NAME
+  - JWT_TOKEN
+- npm run dev
+
+### Versões
+ - Typescript 10.9.3
+ - Node 22.19.0
+ - React 19.2.0
+ - Express 5.2.1"
+
+Dump das tables da database https://drive.google.com/file/d/1O0wXsCMZsBg7IbBCOkh_PDQvu2GWI5st/view?usp=sharing
